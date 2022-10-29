@@ -1,0 +1,18 @@
+CHIP littleDivision{
+    IN R[16], D[16];
+	OUT outR[16],outQ, of;
+	PARTS:
+	/*
+	the minimum part of a division process
+	*/
+	//if remainder < divisor or division is negative, division failed
+	Larger(x=D, y=R, Larger=DlargerthanR);
+	from16to1Boolean(in=DlargerthanR, out=OperationFail1);
+	Or(a=OperationFail1, b=D[15], out=OperationFail); 
+	
+	//New remainder = remainder minus divisor
+	Minus16(x=R, y=D, Minus16=outR1, ofMinus=of);
+	
+	Mux(a=true, b=false, sel=OperationFail, out=outQ);
+	Mux16(a=outR1, b=R, sel=OperationFail, out=outR);
+}

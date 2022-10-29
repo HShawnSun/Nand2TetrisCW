@@ -1,0 +1,32 @@
+CHIP Div16{
+    IN x[16], y[16];
+    OUT out[16], of;
+    PARTS:
+    /*
+    Div16--to control some sign and overflow issues
+    Division16--the body of divsion
+    
+    Div16
+    */
+    
+    //Determine if it is a 16-bit negative number and take the complement
+	ScndComplement(in=x, out=R);
+	ScndComplement(in=y, out=D);
+	//if the absolute value |x| < |y| then answer = 0
+ 	Larger(x=D, y=R, Larger=DlargerthanR);
+	from16to1Boolean(in=DlargerthanR, out=ansZ);
+	//Division operation
+	Division16(x=R, y=D, Division16=outQ0, ofDivision16=ofDivision16);
+	Mux16(a=outQ0, b=false, sel=ansZ, out=outQ);
+	//organize the sign that was removed in the helper Division16
+	Xor(a=x[15], b=y[15], out=DiffSign);
+	Not16(in=outQ, out=NotQ); 
+	Inc16(in=NotQ, out=NotQ1);
+	Mux16(a=outQ, b=NotQ1, sel=DiffSign, out=out);
+	//you can't divide by zero
+	IsZero(in=y, out=FlagZ);
+	Not(in=FlagZ, out=NFlagZ);
+	Or(a=ofDivision16, b=NFlagZ, out=of);
+
+}
+

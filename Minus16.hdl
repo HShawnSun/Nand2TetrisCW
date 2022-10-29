@@ -1,0 +1,37 @@
+CHIP Minus16 {
+    IN x[16], y[16];
+	OUT Minus16[16], ofMinus;
+	PARTS:
+	//y=0
+	//Separate out the cases where the subtract number is 0 (y=0), we don't want the 2'complement is not 
+	IsZero(in=y, out=IsOrNotZero);
+	
+	//y=-32768
+	//Separate out the cases where the subtracted number is not negative (>=0) and the subtract number y=-32768 (1000 0000 0000 0000) to prevent complement errors
+	//becase x-(-32768) overflows (+32767 is the upper limit) when x >= 0
+	Or7Way(in=y[8..14], out=l);
+	Or8Way(in=y[0..7], out=r);
+	Or(a=l, b=r, out=All15Zeros);  //when all 15 digits (beside the first one) = 0
+	Not(in=All15Zeros, out=NotAll15Zeros); 
+	And(a=y[15], b=NotAll15Zeros, out=OverflowErrorPre); //when all 15 digits (beside the first one) = 0 and the sign digit is 1, which means y=-32768
+	Not(in=x[15], out=isNotNegative); 
+	And(a=isNotNegative, b=OverflowErrorPre, out=OverflowError); //when x is not negative and y=-32768, OverflowError will be caused
+	
+	//operate subtraction
+    Not16(in=y, out=NotY);
+	Inc16(in=NotY, out=NotY1);
+	Plus16(x=x, y=NotY1, Plus16=NotZeroMinus16, ofAdd=ofMinusPre);
+		
+	//for the OF: 
+	//if y=-32768 and x>=0, of = 1; 
+	//if y=-32768 and -32768<=x<0, of = 0; 
+	//else, of = the of we get from the subtraction;
+	Mux(a=ofMinusPre, b=true, sel=OverflowError, out=ofMinus1);
+	And(a=OverflowErrorPre, b=x[15], out=isNegativeMinusOverflow);
+	Mux(a=ofMinus1, b=false, sel=isNegativeMinusOverflow, out=ofMinus);
+	
+	//for the output: 
+	//if y=0, output = x; 
+	//else, out = normal output
+	Mux16(a=x, b=NotZeroMinus16, sel=IsOrNotZero, out=Minus16);
+}

@@ -1,0 +1,24 @@
+CHIP shiftLeft{
+	IN x[16];
+	OUT shiftLeft[16], carry;
+	PARTS:
+    Mux(a=false,b=false,sel=false, out=shiftLeft[0]);	
+    //the right end digit will be suplemented with a false
+	Mux(a=x[0],b=false,sel=false, out=shiftLeft[1]);
+	Mux(a=x[1],b=false,sel=false, out=shiftLeft[2]);
+	Mux(a=x[2],b=false,sel=false, out=shiftLeft[3]);
+	Mux(a=x[3],b=false,sel=false, out=shiftLeft[4]);
+	Mux(a=x[4],b=false,sel=false, out=shiftLeft[5]);
+	Mux(a=x[5],b=false,sel=false, out=shiftLeft[6]);
+	Mux(a=x[6],b=false,sel=false, out=shiftLeft[7]);
+	Mux(a=x[7],b=false,sel=false, out=shiftLeft[8]);
+	Mux(a=x[8],b=false,sel=false, out=shiftLeft[9]);
+	Mux(a=x[9],b=false,sel=false, out=shiftLeft[10]);
+	Mux(a=x[10],b=false,sel=false, out=shiftLeft[11]);
+	Mux(a=x[11],b=false,sel=false, out=shiftLeft[12]);
+	Mux(a=x[12],b=false,sel=false, out=shiftLeft[13]);
+	Mux(a=x[13],b=false,sel=false, out=shiftLeft[14]);
+	Mux(a=x[14],b=false,sel=false, out=shiftLeft[15]);
+	Mux(a=x[15],b=false,sel=false, out=carry);
+    //I use Mux to assign each value to the left digit
+}

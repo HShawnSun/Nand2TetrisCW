@@ -1,0 +1,11 @@
+CHIP littleMulti{
+    IN x[16], y[16], sel,  lastX[16], sr[16];
+    OUT of, out[16],NextX[16], carry, srNext[16];
+    PARTS:
+    
+    Plus16(x=x, y=y, Plus16=sum, ofAdd=of);
+    Mux16(a=x, b=sum, sel=sel, out=out); //out is the result of little multi
+    shiftLeft(x=lastX, shiftLeft=NextX, carry=carry);
+    shiftRight(x=sr, shiftRight=srNext);
+
+}

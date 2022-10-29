@@ -1,0 +1,34 @@
+CHIP Larger {
+	IN x[16], y[16];
+	OUT Larger[16], of;
+	PARTS:
+	//Firstly, if numbers have difference bigger than 32768 will overflow, but we should not get overflow such as comparing 2 and -32768; So:
+	//If x >= 0, y < 0, x must > y, output should be 1
+	//If x < 0, y >=0, x must < y, output should be 0
+	Not(in=x[15], out=Notx15);
+	Not(in=y[15], out=Noty15);
+	And(a=x[15], b=Noty15, out=xLargerthany);  //x >=0, larger than y
+	And(a=y[15], b=Notx15, out=yLargerthanx);  //y >=0, is larger than x
+	Xor(a=x[15], b=y[15], out=xyIsDiff);  // deside if x and y have the same first place
+	
+	Not16(in=true, out=Puppy);
+	Inc16(in=Puppy, out=Mummy);
+	
+	Mux16(a=Mummy, b=Puppy, sel=xLargerthany, out=CompareResult1); //If x - y = positive, then x > y, we output 0000 0000 0000 0001 (1) to represent it (I name it as Puppy)
+	Mux16(a=Puppy, b=Mummy, sel=yLargerthanx, out=CompareResult); //If x - y = negative, then x < y, we output 0000 0000 0000 0000 (0) to represent it (I name it as Mummy)
+	
+	Equival(x=x, y=y, Equival=qual); //If x=y, then x is not bigger than y
+	from16to1Boolean(in=qual, out=qual1);
+	Minus16(x=x, y=y, Minus16=difference, ofMinus=ofMinus); //use Minus16.hdl to obtain the difference
+	
+	// covering all overflow possibilities and output variations
+	Or16(a=difference, b=false, out=out, out[15]=LargerPre); 
+	Or(a=LargerPre, b=qual1, out=Judge);
+	Mux16(a=Mummy, b=Puppy, sel=Judge, out=Larger1);
+	Mux16(a=Larger1, b=CompareResult, sel=xyIsDiff, out=Larger);
+	Mux(a=ofMinus, b=false, sel=xyIsDiff, out=of);
+	
+    //If the difference>0, then the first digit will be 0, so set Larger[0] = 1
+    //If the difference<0, then the first digit will be 1, so set Larger[0] = 0
+
+}

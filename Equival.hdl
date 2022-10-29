@@ -1,0 +1,17 @@
+CHIP Equival {
+	IN x[16], y[16];
+	OUT Equival[16], of;
+	PARTS:
+	//first, use Minus16.hdl to obtain the difference
+	Minus16(x=x, y=y, Minus16=difference,ofMinus=of);
+	//decide if the difference is 0
+	IsZero(in=difference, out=IsOrNotZero);
+    //If x - y = 0, then x = y, we output 1 to represent it (Puppy)
+    //If x - y != 0, then x != y, we output 0 to represent it (Mummy)
+    Not16(in=true, out=Puppy);  // true in 16 digits is 1111 1111 1111 1111 (-1), Not it to get a 
+	Inc16(in=Puppy, out=Mummy);
+	
+	Mux16(a=Mummy, b=Puppy, sel=IsOrNotZero, out=Equival);
+    //If the difference=0, then the first digit will be 0, so set Equival[0] = 0000 0000 0000 0001
+    //If the difference!=0, then the first digit will be 1, so set Equival[0] = 0000 0000 0000 0001
+}

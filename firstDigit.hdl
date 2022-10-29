@@ -1,0 +1,59 @@
+CHIP firstDigit{
+    IN in[16];
+    OUT out[16];
+    PARTS:
+    //it shows how many zero digits are before the first 0 bit
+    
+    Or(a=false, b=in[15], out=firstOne0); //leftMost is 0 or 1
+    Or(a=firstOne0, b=in[14], out=firstOne1);
+    Or(a=firstOne1, b=in[13], out=firstOne2);
+    Or(a=firstOne2, b=in[12], out=firstOne3);
+    Or(a=firstOne3, b=in[11], out=firstOne4);
+    Or(a=firstOne4, b=in[10], out=firstOne5);
+    Or(a=firstOne5, b=in[9], out=firstOne6);
+    Or(a=firstOne6, b=in[8], out=firstOne7);
+    Or(a=firstOne7, b=in[7], out=firstOne8);
+    Or(a=firstOne8, b=in[6], out=firstOne9);
+    Or(a=firstOne9, b=in[5], out=firstOne10);
+    Or(a=firstOne10, b=in[4], out=firstOne11);
+    Or(a=firstOne11, b=in[3], out=firstOne12);
+    Or(a=firstOne12, b=in[2], out=firstOne13);
+    Or(a=firstOne13, b=in[1], out=firstOne14);
+    Or(a=firstOne14, b=in[0], out=firstOne15);
+    
+    Inc16(in=false, out=counter0); //counter0=1
+    Inc16(in=counter0, out=counter1);
+    Inc16(in=counter1, out=counter2);
+    Inc16(in=counter2, out=counter3);
+    Inc16(in=counter3, out=counter4);
+    Inc16(in=counter4, out=counter5);
+    Inc16(in=counter5, out=counter6);
+    Inc16(in=counter6, out=counter7);
+    Inc16(in=counter7, out=counter8);
+    Inc16(in=counter8, out=counter9);
+    Inc16(in=counter9, out=counter10);
+    Inc16(in=counter10, out=counter11);
+    Inc16(in=counter11, out=counter12);
+    Inc16(in=counter12, out=counter13);
+    Inc16(in=counter13, out=counter14);
+    Inc16(in=counter14, out=counter15);
+    
+    //plus one if the digit is 0
+    //stop when the digit is 1 (back one)
+     Mux16(a=counter0, b=false, sel=firstOne0, out=out1);
+     Mux16(a=counter1, b=out1, sel=firstOne1, out=out2);
+     Mux16(a=counter2, b=out2, sel=firstOne2, out=out3);
+     Mux16(a=counter3, b=out3, sel=firstOne3, out=out4);
+     Mux16(a=counter4, b=out4, sel=firstOne4, out=out5);
+     Mux16(a=counter5, b=out5, sel=firstOne5, out=out6);
+     Mux16(a=counter6, b=out6, sel=firstOne6, out=out7);
+     Mux16(a=counter7, b=out7, sel=firstOne7, out=out8);
+     Mux16(a=counter8, b=out8, sel=firstOne8, out=out9);
+     Mux16(a=counter9, b=out9, sel=firstOne9, out=out10);
+     Mux16(a=counter10, b=out10, sel=firstOne10, out=out11);
+     Mux16(a=counter11, b=out11, sel=firstOne11, out=out12);
+     Mux16(a=counter12, b=out12, sel=firstOne12, out=out13);
+     Mux16(a=counter13, b=out13, sel=firstOne13, out=out14);
+     Mux16(a=counter14, b=out14, sel=firstOne14, out=out15);
+     Mux16(a=counter15, b=out15, sel=firstOne15, out=out);
+}

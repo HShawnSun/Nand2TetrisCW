@@ -1,0 +1,24 @@
+CHIP Two{
+    OUT out[16];
+    PARTS:
+    /*
+    this CHIP is made to generate the number 2, which is used in division if x or y = -32768
+    */
+    Mux(a=false, b=false, sel=false, out=out[0]);
+    Mux(a=true, b=false, sel=false, out=out[1]);
+    Mux(a=false, b=false, sel=false, out=out[2]);
+    Mux(a=false, b=false, sel=false, out=out[3]);
+    Mux(a=false, b=false, sel=false, out=out[4]);
+    Mux(a=false, b=false, sel=false, out=out[5]);
+    Mux(a=false, b=false, sel=false, out=out[6]);
+    Mux(a=false, b=false, sel=false, out=out[7]);
+    Mux(a=false, b=false, sel=false, out=out[8]);
+    Mux(a=false, b=false, sel=false, out=out[9]);
+    Mux(a=false, b=false, sel=false, out=out[10]);
+    Mux(a=false, b=false, sel=false, out=out[11]);
+    Mux(a=false, b=false, sel=false, out=out[12]);
+    Mux(a=false, b=false, sel=false, out=out[13]);
+    Mux(a=false, b=false, sel=false, out=out[14]);
+    Mux(a=false, b=false, sel=false, out=out[15]);
+
+}

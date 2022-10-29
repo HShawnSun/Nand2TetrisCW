@@ -1,0 +1,12 @@
+CHIP Or7Way {
+    IN in[7];
+    OUT out;
+
+    PARTS:
+    Or(a=in[0], b=in[1], out=result1);
+    Or(a=in[2], b=result1, out=result2);
+    Or(a=in[3], b=result2, out=result3);
+    Or(a=in[4], b=result3, out=result4);
+    Or(a=in[5], b=result4, out=result5);
+    Or(a=in[6], b=result5, out=out);
+}

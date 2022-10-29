@@ -1,0 +1,12 @@
+CHIP ScndComplement{
+    IN in[16];
+    OUT out[16];
+    PARTS:
+    /*
+    take the second complement of a 16 digit number. useful in many scenarios
+    */
+    
+    Not16(in=in, out=Notin);
+	Inc16(in=Notin, out=Notin1);
+	Mux16(a=in, b=Notin1, sel=in[15], out=out);
+}

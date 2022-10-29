@@ -1,0 +1,6 @@
+CHIP from16to1Boolean{
+    IN in[16];
+    OUT out;
+    PARTS:
+    Mux(a=in[0], b=false, sel=false, out=out);
+}

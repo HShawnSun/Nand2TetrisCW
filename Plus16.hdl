@@ -1,0 +1,25 @@
+CHIP Plus16 {
+	IN x[16], y[16];
+	OUT Plus16[16], ofAdd;
+	PARTS:
+	//use HalfAdder to add up first digits
+    HalfAdder(a=x[0],b=y[0],sum=Plus16[0],carry=c);
+    //use FullAdder to handle carrys and add up the rest digits
+	FullAdder(a=x[1],b=y[1],c=c,sum=Plus16[1],carry=d);
+	FullAdder(a=x[2],b=y[2],c=d,sum=Plus16[2],carry=e);
+	FullAdder(a=x[3],b=y[3],c=e,sum=Plus16[3],carry=f);
+	FullAdder(a=x[4],b=y[4],c=f,sum=Plus16[4],carry=g);
+    FullAdder(a=x[5],b=y[5],c=g,sum=Plus16[5],carry=h);
+    FullAdder(a=x[6],b=y[6],c=h,sum=Plus16[6],carry=i);
+    FullAdder(a=x[7],b=y[7],c=i,sum=Plus16[7],carry=j);
+    FullAdder(a=x[8],b=y[8],c=j,sum=Plus16[8],carry=k);
+    FullAdder(a=x[9],b=y[9],c=k,sum=Plus16[9],carry=l);
+    FullAdder(a=x[10],b=y[10],c=l,sum=Plus16[10],carry=m);
+    FullAdder(a=x[11],b=y[11],c=m,sum=Plus16[11],carry=n);
+    FullAdder(a=x[12],b=y[12],c=n,sum=Plus16[12],carry=o);
+    FullAdder(a=x[13],b=y[13],c=o,sum=Plus16[13],carry=p);
+	FullAdder(a=x[14],b=y[14],c=p,sum=Plus16[14],carry=q);
+	FullAdder(a=x[15],b=y[15],c=q,sum=Plus16[15],carry=r);
+	//only if one of the sign digit(15) or the largest digit(14) is 1 and another is 0, there will be ofAdd
+	Xor(a=q, b=r, out=ofAdd);	
+}

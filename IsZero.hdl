@@ -1,0 +1,10 @@
+CHIP IsZero{
+    IN in[16];
+    OUT out;
+    PARTS:
+    Or8Way(in=in[8..15], out=l1);
+	Or8Way(in=in[0..7], out=r1);
+	Or(a=l1, b=r1, out=out);
+
+
+}

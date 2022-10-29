@@ -1,0 +1,29 @@
+CHIP LimitCheck{
+    IN in[16];
+    OUT out;
+    PARTS:
+    //Check if any number is -32768 (1000 0000 0000 0000)
+    //LowerBound
+    //take 16 digit true(1111 1111 1111 1111) left 15 digit to obtain -32768 (1000 0000 0000 0000)
+    shiftLeft(x=true, shiftLeft=x1);
+    shiftLeft(x=x1, shiftLeft=x2);
+    shiftLeft(x=x2, shiftLeft=x3);
+    shiftLeft(x=x3, shiftLeft=x4);
+    shiftLeft(x=x4, shiftLeft=x5);
+    shiftLeft(x=x5, shiftLeft=x6);
+    shiftLeft(x=x6, shiftLeft=x7);
+    shiftLeft(x=x7, shiftLeft=x8);
+    shiftLeft(x=x8, shiftLeft=x9);
+    shiftLeft(x=x9, shiftLeft=x10);
+    shiftLeft(x=x10, shiftLeft=x11);
+    shiftLeft(x=x11, shiftLeft=x12);
+    shiftLeft(x=x12, shiftLeft=x13);
+    shiftLeft(x=x13, shiftLeft=x14);
+    shiftLeft(x=x14, shiftLeft=LowerBound);
+    
+    //if the number in is smaller than -32768, out = 1
+    //if the number in is larger than 32767, out also = 1
+    //else out = 0
+    Equival(x=LowerBound, y=in, Equival=out1);
+    from16to1Boolean(in=out1, out=out);
+}
