@@ -32,7 +32,7 @@ out[0], the remaining bits out[1..15] should set to 0. No overflow case occurs
 and of should always be 0.
 (4 marks)
 
-5. Arithmetic Operation: x × y. x, y can be any signed integers using 2’s complement representation. For any overflow cases or inputs outside the domain,
+5. Arithmetic Operation: x × y. x, y can be any signed integers using 2’s complement representation. For any overflow cases or inputs outside the domain,
 you should set of to 1 and out to −1.
 (2 marks)
 
