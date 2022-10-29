@@ -1,4 +1,4 @@
-# Nand2TetrisCW
+# Nand2TetrisCW1-Augmented ALU
 Nand2Tetris Course Work
 
 ## Description
