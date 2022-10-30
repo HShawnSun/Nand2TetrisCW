@@ -32,7 +32,7 @@ CHIP Multi16 {
     Xor(a=x[15], b=y[15], out=xyXor);
     Xor(a=xyXor, b=Multi16Sign, out=SignError);
     
-    //overflow with multiply errors SOLVED by invalid digits count comparing with 16
+    //overflow with multiply errors SOLVED by invalid digits count comparing with 15
     /*as long as the two number's absolute value's multiplication > 2^15, it will overflow  [1]
         except when x and y are of different sign, meaning x*y < 0, then the absolute value's multiplication >= 2^15 (product = -32768 should not be error). [2]
     */
@@ -44,13 +44,15 @@ CHIP Multi16 {
     //reminder: taking absolute value may cause another common overflow that x or y = -32768, but I covered that problem in the main chip CUSALU, so don't worry
 
     Plus16(x=firstDigitX, y=firstDigitY, Plus16=sum); //sum = the invalid digits of x + the invalid digits of y
-    Sixteen(out=Sixteen); //obtain 16
-    Larger(x=Sixteen, y=sum, Larger=MulError); //if MulError=1, than 16 is larger than sumxyZeroDidits, meaning there will be overflow
-    Equival(x=sum, y=Sixteen, Equival=LimitStep); //this excluded the case that product exactly = - 32768, so we need to dicide it additionally [2]
+    Sixteen(out=Sixteen); 
+    Plus16(x=Sixteen, y=true, Plus16=Fifteen); //obtain 15
+    Larger(x=Fifteen, y=sum, Larger=MulError); //if MulError=1, than 15 is larger than sumxyZeroDidits, meaning there will be overflow
+    Equival(x=sum, y=Fifteen, Equival=LimitStep); //this excluded the case that product exactly = - 32768, so we need to dicide it additionally [2]
     from16to1Boolean(in=LimitStep, out=LimStp);
     And(a=LimStp, b=xyXor, out=xyXorAndLimStp);    //Note that it can only happen when x * y < 0 (x, y are of different sign)
     from16to1Boolean(in=MulError, out=MError);
-    And(a=xyXorAndLimStp, b=MError, out=MultiplyError);
+    Not(in=xyXorAndLimStp, out=NotXL);
+    And(a=NotXL, b=MError, out=MultiplyError);
 
     Or(a=SignError, b=MultiplyError, out=ofMulti);  // signError Or multiply error
 }
