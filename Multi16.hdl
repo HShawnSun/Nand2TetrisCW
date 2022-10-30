@@ -48,9 +48,9 @@ CHIP Multi16 {
     Larger(x=Sixteen, y=sum, Larger=MulError); //if MulError=1, than 16 is larger than sumxyZeroDidits, meaning there will be overflow
     Equival(x=sum, y=Sixteen, Equival=LimitStep); //this excluded the case that product exactly = - 32768, so we need to dicide it additionally [2]
     from16to1Boolean(in=LimitStep, out=LimStp);
+    And(a=LimStp, b=xyXor, out=xyXorAndLimStp);    //Note that it can only happen when x * y < 0 (x, y are of different sign)
     from16to1Boolean(in=MulError, out=MError);
-    And(a=LimStp, b=MError, out=MultiplyError);
+    And(a=xyXorAndLimStp, b=MError, out=MultiplyError);
 
-    
     Or(a=SignError, b=MultiplyError, out=ofMulti);  // signError Or multiply error
 }
