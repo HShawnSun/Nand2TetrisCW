@@ -2,7 +2,8 @@ CHIP firstDigit{
     IN in[16];
     OUT out[16];
     PARTS:
-    //it shows how many zero digits are before the first 1 bit
+    //it shows how many zero digits are before the first 1 bit (or, to count the number of invalid digits)
+    //this is useful in multipication overflow
     
     Or(a=false, b=in[15], out=firstOne0); //leftMost is 0 or 1
     Or(a=firstOne0, b=in[14], out=firstOne1);
