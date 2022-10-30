@@ -3,8 +3,9 @@ CHIP Div16{
     OUT out[16], of;
     PARTS:
     /*
-    Div16--to control some sign and overflow issues
-    Division16--the body of divsion
+    Div16--to control some sign and overflow issues (except the cases when x or y = -32768, which have been covered in the main chip CUSALU)
+    Division16--the real body of divsion
+    littleDivision--minimun step in the division's 16-step process
     
     Div16
     */
