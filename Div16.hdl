@@ -1,6 +1,6 @@
 CHIP Div16{
     IN x[16], y[16];
-    OUT out[16], of;
+    OUT out[16], of, r[16];
     PARTS:
     /*
     Div16--to control some sign and overflow issues (except the cases when x or y = -32768, which have been covered in the main chip CUSALU)
@@ -13,11 +13,14 @@ CHIP Div16{
     //Determine if it is a 16-bit negative number and take the complement
 	ScndComplement(in=x, out=R);
 	ScndComplement(in=y, out=D);
+	
 	//if the absolute value |x| < |y| then answer = 0
  	Larger(x=D, y=R, Larger=DlargerthanR);
 	from16to1Boolean(in=DlargerthanR, out=ansZ);
 	//Division operation
-	Division16(x=R, y=D, Division16=outQ0, ofDivision16=ofDivision16);
+	Division16(x=R, y=D, Division=outQ0, ofDivision16=ofDivision16, r=r);
+	
+	
 	Mux16(a=outQ0, b=false, sel=ansZ, out=outQ);
 	//organize the sign that was removed in the helper Division16
 	Xor(a=x[15], b=y[15], out=DiffSign);
