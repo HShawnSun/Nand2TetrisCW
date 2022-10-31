@@ -1,43 +1,44 @@
 CHIP Division16{
     IN x[16], y[16];
-    OUT Division16[16], ofDivision16;
+    OUT Division[16], ofDivision16, r[16];
     PARTS:
     /*
     Div16--to control some sign and overflow issues
     Division16--the body of divsion
+    littleDivision--minimun step in the division's 16-step process
     
     Division16
     */
+
+    DivLeft(in=y, out=d13);
+    DivLeft(in=d13, out=d12);
+    DivLeft(in=d12, out=d11);
+    DivLeft(in=d11, out=d10);
+    DivLeft(in=d10, out=d9);
+    DivLeft(in=d9, out=d8);
+    DivLeft(in=d8, out=d7);
+    DivLeft(in=d7, out=d6);
+    DivLeft(in=d6, out=d5);
+    DivLeft(in=d5, out=d4);
+    DivLeft(in=d4, out=d3);
+    DivLeft(in=d3, out=d2);
+    DivLeft(in=d2, out=d1);
+    DivLeft(in=d1, out=d0);
     
-    shiftLeft(x=y, shiftLeft=d14);
-    shiftLeft(x=d14, shiftLeft=d13);
-    shiftLeft(x=d13, shiftLeft=d12);
-    shiftLeft(x=d12, shiftLeft=d11);
-    shiftLeft(x=d11, shiftLeft=d10);
-    shiftLeft(x=d10, shiftLeft=d9);
-    shiftLeft(x=d9, shiftLeft=d8);
-    shiftLeft(x=d8, shiftLeft=d7);
-    shiftLeft(x=d7, shiftLeft=d6);
-    shiftLeft(x=d6, shiftLeft=d5);
-    shiftLeft(x=d5, shiftLeft=d4);
-    shiftLeft(x=d4, shiftLeft=d3);
-    shiftLeft(x=d3, shiftLeft=d2);
-    shiftLeft(x=d2, shiftLeft=d1); //d1=-32768
-    
-    Mux(a=false, b=false, sel=false, out=Division16[15]);
-    littleDivision(R=x, D=d1, outR=r2, outQ=Division16[14], of=of2);
-    littleDivision(R=r2, D=d2, outR=r3, outQ=Division16[13], of=of3);
-    littleDivision(R=r3, D=d3, outR=r4, outQ=Division16[12], of=of4);
-    littleDivision(R=r4, D=d4, outR=r5, outQ=Division16[11], of=of5);
-    littleDivision(R=r5, D=d5, outR=r6, outQ=Division16[10], of=of6);
-    littleDivision(R=r6, D=d6, outR=r7, outQ=Division16[9], of=of7);
-    littleDivision(R=r7, D=d7, outR=r8, outQ=Division16[8], of=of8);
-    littleDivision(R=r8, D=d8, outR=r9, outQ=Division16[7], of=of9);
-    littleDivision(R=r9, D=d9, outR=r10, outQ=Division16[6], of=of10);
-    littleDivision(R=r10, D=d10, outR=r11, outQ=Division16[5], of=of11);
-    littleDivision(R=r11, D=d11, outR=r12, outQ=Division16[4], of=of12);
-    littleDivision(R=r12, D=d12, outR=r13, outQ=Division16[3], of=of13);
-    littleDivision(R=r13, D=d13, outR=r14, outQ=Division16[2], of=of14);
-    littleDivision(R=r14, D=d14, outR=r15, outQ=Division16[1], of=of15);
-    littleDivision(R=r15, D=y, outR=r16, outQ=Division16[0], of=ofDivision16);
+    Mux(a=false, b=false, sel=false, out=Division[15]);
+    littleDivision(R=x, D=d0, outR=r1, outQ=Division[14], of=of1);
+    littleDivision(R=r1, D=d1, outR=r2, outQ=Division[13], of=of2);
+    littleDivision(R=r2, D=d2, outR=r3, outQ=Division[12], of=of3);
+    littleDivision(R=r3, D=d3, outR=r4, outQ=Division[11], of=of4);
+    littleDivision(R=r4, D=d4, outR=r5, outQ=Division[10], of=of5);
+    littleDivision(R=r5, D=d5, outR=r6, outQ=Division[9], of=of6);
+    littleDivision(R=r6, D=d6, outR=r7, outQ=Division[8], of=of7);
+    littleDivision(R=r7, D=d7, outR=r8, outQ=Division[7], of=of8);
+    littleDivision(R=r8, D=d8, outR=r9, outQ=Division[6], of=of9);
+    littleDivision(R=r9, D=d9, outR=r10, outQ=Division[5], of=of10);
+    littleDivision(R=r10, D=d10, outR=r11, outQ=Division[4], of=of11);
+    littleDivision(R=r11, D=d11, outR=r12, outQ=Division[3], of=of12);
+    littleDivision(R=r12, D=d12, outR=r13, outQ=Division[2], of=of13);
+    littleDivision(R=r13, D=d13, outR=r14, outQ=Division[1], of=of14);
+    littleDivision(R=r14, D=y, outR=r, outQ=Division[0], of=ofDivision16);
 }
