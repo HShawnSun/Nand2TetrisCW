@@ -1,0 +1,13 @@
+CHIP DivLeft{
+    IN in[16];
+    OUT out[16];
+    PARTS:
+    shiftLeft(x=in, shiftLeft=knight);
+    Larger(x=false, y=knight, Larger=neg);
+    LimitCheck(in=in, out=InisLimit);
+    from16to1Boolean(in=neg, out=neg1);
+    limit32768(out=limit32768);
+    Mux16(a=knight, b=limit32768, sel=neg1, out=out1);
+    Mux16(a=out1, b=limit32768, sel=InisLimit, out=out);
+
+}
