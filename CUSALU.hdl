@@ -86,25 +86,32 @@ CHIP CUSALU {
 	Mux16(a=x, b=halfLimit, sel=xIsLimit, out=x1);
 	Mux16(a=y, b=halfLimit, sel=yIsLimit, out=y1);
 	//division body (Div16 and Divsion16 inside it)
-	Div16(x=x1, y=y1, out=Division16, of=ErrorDiv1, r=r);
-	from16to1Boolean(in=r, out=r0);
+	Div16(x=x1, y=y1, out=Division16, of=ErrorDiv1, r=r, isLargerThanhalfLimit=yisLargerThanhalfLimit);
+	Equival(x=r, y=false, Equival=rr0);
+	from16to1Boolean(in=rr0, out=rA0);
+	Not(in=rA0, out=r0);
 	//if x or y = -32768, their are three possibilities
 	Two(out=Two1);
 	Multi16(x=Division16, y=Two1, Multi16=DivxLimyNotlim, ofMulti=ofxLimyNotlim); //if x = -32768, y != -32768, then Multiply the result with two
 	Equival(x=y, y=true, Equival=yIsNeg1);
+	Inc16(in=false, out=One);
 	from16to1Boolean(in=yIsNeg1, out=yIsNeg1out);
 	And(a=xIsLimit, b=yIsNeg1out, out=OverflowErrorDiv); //if x = -32768, y=-1, overflow
+	//if x= -32768,  16384 <=|y|<= 32767, output = 1 (ground down other considered)
+	And(a=xIsLimit, b=yisLargerThanhalfLimit, out=LimitGround);// such as -32768 / 32767, this is to solve the problem with half-cutting
+	Xor(a=x[15], b=y[15], out=xyDF);
+	Mux16(a=One, b=true, sel=xyDF, out=LMG);
+	Mux16(a=DivxLimyNotlim, b=LMG, sel=LimitGround, out=DivxLimyNotlimOut);
 	Mux(a=ErrorDiv1, b=true, sel=OverflowErrorDiv, out=ErrorDiv);
 	Div16(x=Division16, y=Two1, out=DivyLimxNotlim, of=ofyLimxNotlim); //if x != -32768, y = -32768, then Divide the result with four
-	Inc16(in=false, out=One);
 	And(a=xIsLimit, b=yIsLimit, out=BothLimit);
-	Mux16(a=DivyLimxNotlim, b=DivxLimyNotlim, sel=xIsLimit, out=DivOneofxyIsLim);
+	Mux16(a=DivyLimxNotlim, b=DivxLimyNotlimOut, sel=xIsLimit, out=DivOneofxyIsLim);
 	Xor(a=xIsLimit, b=yIsLimit, out=xOryisLimit);
 	Mux16(a=Division16, b=DivOneofxyIsLim, sel=xOryisLimit, out=Div16Pre); 
 	Mux16(a=Div16Pre, b=One, sel=BothLimit, out=Div16); //if x and y both = -32768, result=1
 	Mux16(a=Div16, b=true,sel=ErrorDiv, out=Division16out1);
 	//When output is negative, ground down	
-	Xor(a=x[15], b=y[15], out=xyDF);
+	
 	And(a=xyDF, b=r0, out=groundDown);
 	Plus16(x=Division16out1, y=true, Plus16=Division16out2);
 	Mux16(a=Division16out1, b=Division16out2, sel=groundDown, out=Division16out);
@@ -127,4 +134,7 @@ CHIP CUSALU {
  	sel[0] = sel[0] , sel[1] = sel[1] , sel[2] = sel[2], 
  	out = of2) ; 
  	Mux(a = of1 , b = of2 , sel = sel[3] , out = of); 
+ 	
+ 	
+ 	
 }
